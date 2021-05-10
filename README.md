@@ -30,7 +30,7 @@ if the foreign key was for a `posts` table it would be `post_id`.
 
 We can visualize in this in an Entity Relationship Diagram (ERD):
 
-![one-to-many](posts-authors.png)
+![one-to-many](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-authors.png)
 
 Like any other column, foreign keys are accessible through instance methods of
 the same name. For example, a schema for the above ERD would look like this:
@@ -230,7 +230,7 @@ their own model. In this case:
 
 Here's an example of what that ERD would look like:
 
-![one-to-one diagram](profiles-authors.png)
+![one-to-one diagram](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/profiles-authors.png)
 
 `belongs_to` makes another appearance in this relationship, but instead of
 `has_many` the other model is declared with `has_one`:
@@ -287,7 +287,7 @@ both tags, while Post 5 has only one.
 
 We need a new table that sits between `posts` and `tags`:
 
-![many-to-many diagram](posts-post_tags-tags.png)
+![many-to-many diagram](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-post_tags-tags.png)
 
 ### `has_many :through`
 
