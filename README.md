@@ -26,9 +26,10 @@ You can use `rails console` to test out the code from these examples.
 It all starts in the database. **Foreign keys** are columns that refer to the
 primary key of another table. Conventionally, foreign keys in Active Record are
 comprised of the name of the model you're referencing, and `_id`. So for example
-if the foreign key was for a `posts` table it would be `post_id`.
+if the foreign key was for a `authors` table it would be `author_id`.
 
-We can visualize in this in an Entity Relationship Diagram (ERD):
+We can visualize in the relationship between two tables using foreign keys in an
+Entity Relationship Diagram (ERD):
 
 ![one-to-many](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-authors.png)
 
@@ -170,7 +171,7 @@ new_post = author.posts.create(title: "Web Development for Cats")
 This will return a create a new `Post` object with the `author_id` already set
 for you! We use this one as much as possible because it's just easier.
 
-`author.posts.build` will create a new instance and persist it to the database.
+`author.posts.create` will create a new instance and persist it to the database.
 You can also use `author.posts.build` to generate a new instance without
 persisting.
 
@@ -191,7 +192,7 @@ the attribute with `build_` or `create_`. The `create_` option will persist to
 the database for you.
 
 ```ruby
-new_author = post.build_author(name: "Leeroy Jenkins")
+new_author = post.create_author(name: "Leeroy Jenkins")
 ```
 
 Remember, if you used the `build_` option, you'll need to persist your new `author` with `#save`.
@@ -289,7 +290,7 @@ We need a new table that sits between `posts` and `tags`:
 
 ![many-to-many diagram](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-post_tags-tags.png)
 
-### `has_many :through`
+### has_many :through
 
 To work with the join table, both our `Post` and `Tag` models will have a
 `has_many` association with the `post_tags` table. We also still need to
