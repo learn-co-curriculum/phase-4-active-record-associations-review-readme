@@ -3,14 +3,16 @@
 ## Learning Goals
 
 - Understand how the foreign key is used to connect between two tables
-- Create one-to-many and many-to-many relationships
-- Use `has_many` and `belongs_to` Active Record macros
+- Create one-to-many relationships using the `has_many` and `belongs_to` Active Record macros
+- Create one-to-one relationships using the `has_one` and `belongs_to` macros
+- Create many-to-many relationships using a join table and `has_many_through`
+- Use convenience builders to write less verbose code
 
 ## Introduction
 
 Active Record associations are an iconic Rails feature. They allow developers to
 work with complex networks of related models without having to write a single
-line of SQL &mdash; as long as all of the names line up!
+line of SQL — as long as all of the names line up!
 
 To code along, run:
 
@@ -24,17 +26,16 @@ You can use `rails console` to test out the code from these examples.
 ## Foreign Keys
 
 It all starts in the database. **Foreign keys** are columns that refer to the
-primary key of another table. Conventionally, foreign keys in Active Record are
-comprised of the name of the model you're referencing, and `_id`. So for example
+primary key of another table. Conventionally, we label foreign keys in Active
+Record using the name of the model you're referencing, and `_id`. So for example
 if the foreign key was for a `authors` table it would be `author_id`.
 
-We can visualize in the relationship between two tables using foreign keys in an
+We can visualize the relationship between two tables using foreign keys in an
 Entity Relationship Diagram (ERD):
 
 ![one-to-many](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-authors.png)
 
-Like any other column, foreign keys are accessible through instance methods of
-the same name. For example, a schema for the above ERD would look like this:
+The schema for this ERD would be:
 
 ```rb
 create_table "authors", force: :cascade do |t|
@@ -48,8 +49,9 @@ create_table "posts", force: :cascade do |t|
 end
 ```
 
-And in Active Record, this mean you could find a post's author with the
-following Active Record query:
+Like any other column, foreign keys are accessible through instance methods of
+the same name. This means you could find a given `post`'s author with the following
+Active Record query:
 
 ```ruby
 Author.find(post.author_id)
@@ -61,7 +63,7 @@ Which is equivalent to the SQL:
 SELECT * FROM authors WHERE id = #{post.author_id}
 ```
 
-And you could lookup an author's posts like this:
+And you could look up a given `author`'s posts like this:
 
 ```ruby
 Post.where("author_id = ?", author.id)
@@ -143,7 +145,7 @@ Remember, Active Record uses its [Inflector][api_inflector] to switch between th
   </tr>
   <tr>
     <td>`has_many`</td>
-    <td>`:authors`</td>
+    <td>`:posts`</td>
   </tr>
 </table>
 
@@ -168,8 +170,8 @@ But the association macros save the day again, allowing this instead:
 new_post = author.posts.create(title: "Web Development for Cats")
 ```
 
-This will return a create a new `Post` object with the `author_id` already set
-for you! We use this one as much as possible because it's just easier.
+This will create a new `Post` object with the `author_id` already set for you!
+We use this one as much as possible because it's just easier.
 
 `author.posts.create` will create a new instance and persist it to the database.
 You can also use `author.posts.build` to generate a new instance without
@@ -186,16 +188,16 @@ post.author = Author.new(name: "Leeroy Jenkins")
 ```
 
 In the previous section, `author.posts` always exists, even if it's an empty
-array. Here, `post.author` is `nil` until the author is defined, so Active
-Record can't give us something like `post.author.create`. Instead, it prepends
-the attribute with `build_` or `create_`. The `create_` option will persist to
-the database for you.
+array. Here, `post.author` is `nil` until the author is defined, so using
+`post.author.create` would throw an error. Instead, Active Record allows us to
+prepend the attribute with `build_` or `create_`. The `create_` option will
+persist to the database for you.
 
 ```ruby
 new_author = post.create_author(name: "Leeroy Jenkins")
 ```
 
-Remember, if you used the `build_` option, you'll need to persist your new `author` with `#save`.
+Remember, if you use the `build_` option, you'll need to persist your new `author` with `#save`.
 
 These methods are also documented in the [Rails Associations Guide][guides_associations].
 
@@ -298,7 +300,8 @@ associate `Post` and `Tag` themselves. Ideally, we'd like to be able to call a
 `@my_post.tags` method, right? That's where `has_many :through` comes in.
 
 To do this requires a bit of focus. But you can do it! First of all, let's add
-the `has_many :post_tags` line to our `Post` and `Tag` models:
+the `has_many :post_tags` line to our `Post` and `Tag` models, and add the
+`belongs_to` relationships to our `PostTag` model:
 
 ```ruby
 class Post < ApplicationRecord
