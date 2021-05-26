@@ -3,7 +3,8 @@
 ## Learning Goals
 
 - Understand how the foreign key is used to connect between two tables
-- Create one-to-many relationships using the `has_many` and `belongs_to` Active Record macros
+- Create one-to-many relationships using the `has_many` and `belongs_to` Active
+  Record macros
 - Create one-to-one relationships using the `has_one` and `belongs_to` macros
 - Create many-to-many relationships using a join table and `has_many_through`
 - Use convenience builders to write less verbose code
@@ -21,14 +22,15 @@ bundle install
 rails db:migrate db:seed
 ```
 
-You can use `rails console` to test out the code from these examples.
+You can use `rails console` to follow along with the examples. Remember you'll
+need to relaunch the console each time you make changes to the files.
 
 ## Foreign Keys
 
 It all starts in the database. **Foreign keys** are columns that refer to the
 primary key of another table. Conventionally, we label foreign keys in Active
 Record using the name of the model you're referencing, and `_id`. So for example
-if the foreign key was for a `authors` table it would be `author_id`.
+if the foreign key was for an `authors` table it would be `author_id`.
 
 We can visualize the relationship between two tables using foreign keys in an
 Entity Relationship Diagram (ERD):
@@ -100,8 +102,8 @@ We now have access to some new instance methods, like `author`. This will return
 the actual `Author` object that is attached to that `post`.
 
 ```ruby
-post.author_id = 5
-post.author #=> #<Author id=5>
+post = Post.first
+post.author #=> #<Author @id=1>
 ```
 
 ### has_many
@@ -120,10 +122,12 @@ end
 Now we can look up an author's posts just as easily:
 
 ```ruby
-author.posts #=> [#<Post id=3>, #<Post id=8>]
+author = Author.last
+author.posts #=> [#<Post @id=3>, #<Post @id=4>]
 ```
 
-Remember, Active Record uses its [Inflector][api_inflector] to switch between the singular and plural forms of your models.
+Remember, Active Record uses its [Inflector][api_inflector] to switch between
+the singular and plural forms of your models.
 
 <table border="1" cellpadding="4" cellspacing="0">
   <tr>
@@ -167,7 +171,11 @@ new_post = Post.create(author_id: author.id, title: "Web Development for Cats")
 But the association macros save the day again, allowing this instead:
 
 ```ruby
+author = Author.first
 new_post = author.posts.create(title: "Web Development for Cats")
+
+author.posts
+#=> [#<Post @id=1>, #<Post @id=5>]
 ```
 
 This will create a new `Post` object with the `author_id` already set for you!
@@ -180,11 +188,11 @@ persisting.
 ### Setting a singular association
 
 The setup process is a little bit less intuitive for singular associations.
-Remember, a post `belongs_to` an author. The verbose way of creating this
+Remember, a given post `belongs_to` an author. The verbose way of creating this
 association would be like so:
 
 ```ruby
-post.author = Author.new(name: "Leeroy Jenkins")
+post.author = Author.new(name: "Lasandra Gulgowski")
 ```
 
 In the previous section, `author.posts` always exists, even if it's an empty
@@ -194,12 +202,21 @@ prepend the attribute with `build_` or `create_`. The `create_` option will
 persist to the database for you.
 
 ```ruby
-new_author = post.create_author(name: "Leeroy Jenkins")
+post = Post.new(title: "Web Development for Dogs")
+new_author = post.create_author(name: "Lasandra Gulgowski")
+post.save
+
+post.author
+#=> #<Author @name="Lasandra Gulgowski">
+new_author.post
+#=> [#<Post @title="Web Development for Dogs">]
 ```
 
-Remember, if you use the `build_` option, you'll need to persist your new `author` with `#save`.
+Remember, if you use the `build_` option, you'll need to persist your new
+`author` with `#save`.
 
-These methods are also documented in the [Rails Associations Guide][guides_associations].
+These methods are also documented in the [Rails Associations
+Guide][guides_associations].
 
 ### Collection Convenience
 
@@ -207,15 +224,17 @@ If you add an existing object to a collection association, Active Record will
 conveniently take care of setting the foreign key for you:
 
 ```ruby
-author = Author.find_by(name: "Leeroy Jenkins")
+author = Author.find_by(name: "Lasandra Gulgowski")
 author.posts
-#=> []
+#=> [#<Post @title="Web Development for Dogs">]
+
 post = Post.new(title: "Web Development for Cats")
 post.author
 #=> nil
+
 author.posts << post
 post.author
-#=> #<Author @name="Leeroy Jenkins">
+#=> #<Author @name="Lasandra Gulgowski">
 ```
 
 ## One-to-One Relationships
@@ -252,6 +271,19 @@ If you're not sure which model should be declared with which macro, it's usually
 a safe bet to put `belongs_to` on whichever model has the foreign key column in
 its database table.
 
+With this in place, we can now do the following:
+
+```rb
+author = Author.first
+profile = Profile.first
+
+author.profile
+#=> #<Profile @username="ljenk">
+
+profile.author
+#=> #<Author @name="Leeroy Jenkins">
+```
+
 ## Many-to-Many Relationships and Join Tables
 
 Each author has many posts, each post has one author.
@@ -267,26 +299,43 @@ place to put the foreign key column.
 
 <table border="1" cellpadding="4" cellspacing="0">
   <tr>
-    <th>`tag_id`</th>
     <th>`post_id`</th>
+    <th>`tag_id`</th>
   </tr>
 
   <tr>
     <td>1</td>
     <td>1</td>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>2</td>
   </tr>
   <tr>
     <td>2</td>
     <td>1</td>
   </tr>
   <tr>
-    <td>1</td>
-    <td>5</td>
+    <td>2</td>
+    <td>3</td>
   </tr>
+  <tr>
+    <td>3</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>3</td>
+  </tr>
+  
 </table>
 
-This join table depicts two tags (1 and 2) and two posts (1 and 5). Post 1 has
-both tags, while Post 5 has only one.
+This join table depicts the relationship between posts and tags in the seed
+data. Post one has tags 1 and 2, Post 2 has tags 1 and 3, etc.
 
 We need a new table that sits between `posts` and `tags`:
 
@@ -305,6 +354,7 @@ the `has_many :post_tags` line to our `Post` and `Tag` models, and add the
 
 ```ruby
 class Post < ApplicationRecord
+  belongs_to :author
   has_many :post_tags
 end
 
@@ -327,6 +377,7 @@ out:
 
 ```ruby
 class Post < ApplicationRecord
+  belongs_to :author
   has_many :post_tags
   has_many :tags, through: :post_tags
 end
@@ -342,7 +393,19 @@ class Tag < ApplicationRecord
 end
 ```
 
-Great, we've unlocked our `post.tags` and `@tag.posts` methods!
+Now we've unlocked our `@post.tags` and `@tag.posts` methods:
+
+```rb
+post = Post.first
+post.tags
+#=> [#<Tag @id=1>, #<Tag @id=2>]
+
+tag = Tag.last
+tag.posts
+#=> [#<Post @id=2>, #<Post @id=4>]
+```
+
+Consult the documentation to learn more about the [has many through][guides_has_many_through] relationship.
 
 ## Conclusion
 
