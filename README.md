@@ -335,7 +335,7 @@ place to put the foreign key column.
 </table>
 
 This join table depicts the relationship between posts and tags in the seed
-data. Post one has tags 1 and 2, Post 2 has tags 1 and 3, etc.
+data. Post 1 has tags 1 and 2, Post 2 has tags 1 and 3, etc.
 
 We need a new table that sits between `posts` and `tags`:
 
@@ -405,7 +405,7 @@ tag.posts
 #=> [#<Post @id=2>, #<Post @id=4>]
 ```
 
-Consult the documentation to learn more about the [has many through][guides_has_many_through] relationship.
+Consult the documentation to learn more about the [has many through][guides_has_many_through] association.
 
 ## Conclusion
 
