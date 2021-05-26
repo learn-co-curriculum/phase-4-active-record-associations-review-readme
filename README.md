@@ -35,7 +35,7 @@ if the foreign key was for an `authors` table it would be `author_id`.
 We can visualize the relationship between two tables using foreign keys in an
 Entity Relationship Diagram (ERD):
 
-![one-to-many](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-authors.png)
+![one-to-many](https://curriculum-content.s3.amazonaws.com/phase-4/active-record-associations-review/posts-authors.png)
 
 The schema for this ERD would be:
 
@@ -252,7 +252,7 @@ their own model. In this case:
 
 Here's an example of what that ERD would look like:
 
-![one-to-one diagram](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/profiles-authors.png)
+![one-to-one diagram](https://curriculum-content.s3.amazonaws.com/phase-4/active-record-associations-review/profiles-authors.png)
 
 `belongs_to` makes another appearance in this relationship, but instead of
 `has_many` the other model is declared with `has_one`:
@@ -339,7 +339,7 @@ data. Post 1 has tags 1 and 2, Post 2 has tags 1 and 3, etc.
 
 We need a new table that sits between `posts` and `tags`:
 
-![many-to-many diagram](https://raw.githubusercontent.com/learn-co-curriculum/phase-4-active-record-associations-review-readme/master/posts-post_tags-tags.png)
+![many-to-many diagram](https://curriculum-content.s3.amazonaws.com/phase-4/active-record-associations-review/posts-post_tags-tags.png)
 
 ### has_many :through
 
