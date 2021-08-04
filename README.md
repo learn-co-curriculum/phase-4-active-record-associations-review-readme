@@ -129,29 +129,12 @@ author.posts #=> [#<Post @id=3>, #<Post @id=4>]
 Remember, Active Record uses its [Inflector][api_inflector] to switch between
 the singular and plural forms of your models.
 
-<table border="1" cellpadding="4" cellspacing="0">
-  <tr>
-    <th>Name</th>
-    <th>Data</th>
-  </tr>
-
-  <tr>
-    <td>Model</td>
-    <td>`Author`</td>
-  </tr>
-  <tr>
-    <td>Foreign Key</td>
-    <td>`author_id`</td>
-  </tr>
-  <tr>
-    <td>`belongs_to`</td>
-    <td>`:author`</td>
-  </tr>
-  <tr>
-    <td>`has_many`</td>
-    <td>`:posts`</td>
-  </tr>
-</table>
+| Name | Data |
+| --- | --- |
+| Model | `Author` |
+| Foreign Key | `author_id` |
+| `belongs_to` | `:author` |
+| `has_many` | `:posts` |
 
 Like many other Active Record class methods, the symbol you pass determines the
 name of the instance method that will be defined. So `belongs_to :author` will
@@ -297,42 +280,15 @@ shake things up and think about tags.
 Because there is no "owner" model in this relationship, there's also no right
 place to put the foreign key column.
 
-<table border="1" cellpadding="4" cellspacing="0">
-  <tr>
-    <th>`post_id`</th>
-    <th>`tag_id`</th>
-  </tr>
-
-  <tr>
-    <td>1</td>
-    <td>1</td>
-  </tr>
-  <tr>
-    <td>1</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>1</td>
-  </tr>
-  <tr>
-    <td>2</td>
-    <td>3</td>
-  </tr>
-  <tr>
-    <td>3</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td>4</td>
-    <td>3</td>
-  </tr>
-  
-</table>
+| `post_id` | `tag_id` |
+| --- | --- |
+| 1 | 1 |
+| 1 | 2 |
+| 2 | 1 |
+| 2 | 3 |
+| 3 | 2 |
+| 4 | 2 |
+| 4 | 3 |
 
 This join table depicts the relationship between posts and tags in the seed
 data. Post 1 has tags 1 and 2, Post 2 has tags 1 and 3, etc.
