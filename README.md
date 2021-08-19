@@ -90,7 +90,8 @@ across models in a **one-to-many** relationship.
 
 ### belongs_to
 
-Each `Post` is associated with **one** `Author`.
+Each `Post` is associated with **one** `Author`. Update your model to include
+this association macro:
 
 ```ruby
 class Post < ApplicationRecord
@@ -111,7 +112,7 @@ post.author #=> #<Author @id=1>
 In the opposite direction, each `Author` might be associated with zero, one, or
 many `Post` objects. We haven't changed the schema of the `authors` table at
 all; Active Record is just going to use `posts.author_id` to do all of the
-lookups.
+lookups. Update your model to include this association macro:
 
 ```ruby
 class Author < ApplicationRecord
@@ -129,12 +130,12 @@ author.posts #=> [#<Post @id=3>, #<Post @id=4>]
 Remember, Active Record uses its [Inflector][api_inflector] to switch between
 the singular and plural forms of your models.
 
-| Name | Data |
-| --- | --- |
-| Model | `Author` |
-| Foreign Key | `author_id` |
-| `belongs_to` | `:author` |
-| `has_many` | `:posts` |
+| Name         | Data        |
+| ------------ | ----------- |
+| Model        | `Author`    |
+| Foreign Key  | `author_id` |
+| `belongs_to` | `:author`   |
+| `has_many`   | `:posts`    |
 
 Like many other Active Record class methods, the symbol you pass determines the
 name of the instance method that will be defined. So `belongs_to :author` will
@@ -242,10 +243,14 @@ Here's an example of what that ERD would look like:
 
 ```rb
 class Author < ApplicationRecord
+  has_many :posts
+
+  # add this:
   has_one :profile
 end
 
 class Profile < ApplicationRecord
+  # add this:
   belongs_to :author
 end
 ```
@@ -281,14 +286,14 @@ Because there is no "owner" model in this relationship, there's also no right
 place to put the foreign key column.
 
 | `post_id` | `tag_id` |
-| --- | --- |
-| 1 | 1 |
-| 1 | 2 |
-| 2 | 1 |
-| 2 | 3 |
-| 3 | 2 |
-| 4 | 2 |
-| 4 | 3 |
+| --------- | -------- |
+| 1         | 1        |
+| 1         | 2        |
+| 2         | 1        |
+| 2         | 3        |
+| 3         | 2        |
+| 4         | 2        |
+| 4         | 3        |
 
 This join table depicts the relationship between posts and tags in the seed
 data. Post 1 has tags 1 and 2, Post 2 has tags 1 and 3, etc.
