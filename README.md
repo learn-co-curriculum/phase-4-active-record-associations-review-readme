@@ -17,9 +17,9 @@ line of SQL — as long as all of the names line up!
 
 To code along, run:
 
-```sh
-bundle install
-rails db:migrate db:seed
+```console
+$ bundle install
+$ rails db:migrate db:seed
 ```
 
 You can use `rails console` to follow along with the examples. Remember you'll
