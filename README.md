@@ -99,8 +99,8 @@ class Post < ApplicationRecord
 end
 ```
 
-We now have access to some new instance methods, like `author`. This will return
-the actual `Author` object that is attached to that `post`.
+This gives us access to an `author` method in our `Post` class. We can now
+retrieve the actual `Author` object that is attached to a `post` as follows:
 
 ```ruby
 post = Post.first
@@ -179,8 +179,9 @@ association would be like so:
 post.author = Author.new(name: "Lasandra Gulgowski")
 ```
 
-In the previous section, `author.posts` always exists, even if it's an empty
-array. Here, `post.author` is `nil` until the author is defined, so using
+In the previous section, once the `has_many` relationship is defined in the
+`Author` model, `author.posts` always exists, even if it's an empty array. Here,
+`post.author` is `nil` until the author is defined, so using
 `post.author.create` would throw an error. Instead, Active Record allows us to
 prepend the attribute with `build_` or `create_`. The `create_` option will
 persist to the database for you.
@@ -192,7 +193,7 @@ post.save
 
 post.author
 #=> #<Author @name="Lasandra Gulgowski">
-new_author.post
+new_author.posts
 #=> [#<Post @title="Web Development for Dogs">]
 ```
 
@@ -384,6 +385,13 @@ data from the related table via the join table.
 
 You can see the entire [list of class methods][api_associations_class_methods]
 in the Rails API docs.
+
+## Check For Understanding
+
+Before you move on, make sure you can answer the following questions:
+
+1. What are the steps you learned in this lesson to create a new Rails API
+   project and get it set up to respond to a request for a resource?
 
 ## Resources
 
