@@ -386,13 +386,6 @@ data from the related table via the join table.
 You can see the entire [list of class methods][api_associations_class_methods]
 in the Rails API docs.
 
-## Check For Understanding
-
-Before you move on, make sure you can answer the following questions:
-
-1. What are the steps you learned in this lesson to create a new Rails API
-   project and get it set up to respond to a request for a resource?
-
 ## Resources
 
 - [Active Record Association Basics](http://guides.rubyonrails.org/association_basics.html)
