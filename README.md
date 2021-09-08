@@ -390,8 +390,9 @@ in the Rails API docs.
 
 Before you move on, make sure you can answer the following questions:
 
-1. What are the steps you learned in this lesson to create a new Rails API
-   project and get it set up to respond to a request for a resource?
+1. In a one-to-many or one-to-one relationship, how do you determine which
+   model's table should include a foreign key?
+2. What is a join table and under what circumstances do we need one?
 
 ## Resources
 
