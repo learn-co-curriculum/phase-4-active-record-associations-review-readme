@@ -6,7 +6,7 @@
 - Create one-to-many relationships using the `has_many` and `belongs_to` Active
   Record macros
 - Create one-to-one relationships using the `has_one` and `belongs_to` macros
-- Create many-to-many relationships using a join table and `has_many_through`
+- Create many-to-many relationships using a join table and `has_many :through`
 - Use convenience builders to write less verbose code
 
 ## Introduction
