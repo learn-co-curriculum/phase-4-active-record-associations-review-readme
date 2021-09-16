@@ -386,6 +386,14 @@ data from the related table via the join table.
 You can see the entire [list of class methods][api_associations_class_methods]
 in the Rails API docs.
 
+## Check For Understanding
+
+Before you move on, make sure you can answer the following questions:
+
+1. In a one-to-many or one-to-one relationship, how do you determine which
+   model's table should include a foreign key?
+2. What is a join table and under what circumstances do we need one?
+
 ## Resources
 
 - [Active Record Association Basics](http://guides.rubyonrails.org/association_basics.html)
