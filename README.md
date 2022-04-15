@@ -344,7 +344,7 @@ class Post < ApplicationRecord
   has_many :tags, through: :post_tags
 end
 
-class PostsTag < ApplicationRecord
+class PostTag < ApplicationRecord
   belongs_to :post
   belongs_to :tag
 end
